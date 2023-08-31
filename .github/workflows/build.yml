@@ -76,12 +76,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dtb
-          path: kernel-source/out/arch/arm64/boot/dtb.img
+          path: kernel-source/out/arch/arm64/boot/dtb
           
       - name: Make Anykernel for the kernel
         run: |
           cp -rf kernel-source/out/arch/arm64/boot/Image ./anykernel
           cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ./anykernel
+          cp -rf kernel-source/out/arch/arm64/boot/dtb ./anykernel
        
           
       - name: Upload AnyKernel zip

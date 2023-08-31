@@ -60,10 +60,23 @@ jobs:
           make LLVM=1 LLVM_IAS=1 O=out ARCH=arm64 SUBARCH=arm64 CC=clang LD=ld.lld alioth_hylab_defconfig
           make -j$(nproc) LLVM=1 LLVM_IAS=1 O=out ARCH=arm64 SUBARCH=arm64 CC=clang LD=ld.lld CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- KBUILD_BUILD_USER=hylab KBUILD_BUILD_HOST=localhost
 
+      - name: Upload the kernel image
+        uses: actions/upload-artifact@v3
+          with:
+          name: Image
+          path: kernel-source/out/arch/arm64/boot/Image
+
+      - name: Upload DTBO image
+        uses: actions/upload-artifact@v3
+          with:
+          name: dtbo
+          path: kernel-source/out/arch/arm64/boot/dtbo.img
+          
       - name: Make Anykernel for the kernel
         run: |
-          cp -rf kernel-source/out/arch/arm64/boot/Image ${{ env.ANYKERNEL_DIR }}
-          cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ${{ env.ANYKERNEL_DIR }}
+          cp -rf kernel-source/out/arch/arm64/boot/Image ./anykernel
+          cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ./anykernel
+          zip -r -9 -q -o ./anykernel
           #cp -fp ${{ env.ZIMAGE_DIR }}/dtb ${{ env.ANYKERNEL_DIR }}
           #mkdir image_output
           #cd kernel-source
@@ -91,7 +104,7 @@ jobs:
 
       #- name: Zip
        # run: |
-      #    zip -r -9 -q -o K40-Kernel.zip ./tmp
+      #    zip -r -9 -q -o K40-Kernel.zip ./
 
      # - name: Kernel REL
       #  uses: actions/upload-artifact@v3

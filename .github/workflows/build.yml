@@ -62,8 +62,8 @@ jobs:
 
       - name: Make Anykernel for the kernel
         run: |
-          cp -fp ${{ env.ZIMAGE_DIR }}/Image ${{ env.ANYKERNEL_DIR }}
-          cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img ${{ env.ANYKERNEL_DIR }}
+          cp -rf kernel-source/out/arch/arm64/boot/Image ${{ env.ANYKERNEL_DIR }}
+          cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ${{ env.ANYKERNEL_DIR }}
           #cp -fp ${{ env.ZIMAGE_DIR }}/dtb ${{ env.ANYKERNEL_DIR }}
           #mkdir image_output
           #cd kernel-source

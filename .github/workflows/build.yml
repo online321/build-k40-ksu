@@ -81,5 +81,5 @@ jobs:
       - name: Upload AnyKernel zip
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.FINAL_ZIP}}
-          path: ${{ env.ANYKERNEL_DIR }}
+          name: K40-IMPERF-KSU
+          path: ./anykernel

@@ -45,6 +45,13 @@ jobs:
           cd kernel-source 
           ./KernelSU/kernel/setup.sh main
 
+      - name: Checkout AnyKernel3
+        uses: actions/checkout@v3
+        with:
+          github-server-url: 'https://github.com'
+          repository: online321/AnyKernel3
+          path: anykernel
+
       - name: Make
         run: |
           export ClangHome=$(pwd)/clang
@@ -53,25 +60,46 @@ jobs:
           make LLVM=1 LLVM_IAS=1 O=out ARCH=arm64 SUBARCH=arm64 CC=clang LD=ld.lld alioth_hylab_defconfig
           make -j$(nproc) LLVM=1 LLVM_IAS=1 O=out ARCH=arm64 SUBARCH=arm64 CC=clang LD=ld.lld CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- KBUILD_BUILD_USER=hylab KBUILD_BUILD_HOST=localhost
 
-      - name: Patch Boot
+      - name: Make Anykernel for the kernel
         run: |
-          chmod +x ./magiskboot
-          unzip boot.zip
-          cp -rf kernel-source/out/arch/arm64/boot/Image ./Image
-          cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ./dtbo.img
-          ./magiskboot unpack boot.img
-          rm -rf kernel
-          mv Image kernel
-          ./magiskboot repack boot.img
-          rm -rf ramdisk.cpio boot.img
-          mv kernel Image
+          cp -fp ${{ env.ZIMAGE_DIR }}/Image ${{ env.ANYKERNEL_DIR }}
+          cp -fp ${{ env.ZIMAGE_DIR }}/dtbo.img ${{ env.ANYKERNEL_DIR }}
+          cp -fp ${{ env.ZIMAGE_DIR }}/dtb ${{ env.ANYKERNEL_DIR }}
+          #mkdir image_output
+          #cd kernel-source
+          #TIME=$(TZ=Asia/Shanghai date "+%Y%m%d%H%M")
+          #mkdir -p tmp
+          #cp -rf kernel-source/out/arch/arm64/boot/Image tmp
+          #cp -rf kernel-source/out/arch/arm64/boot/dtbo.img tmp
+          #cp -rp ./anykernel/* tmp
+        
+        # cd tmp
+        # 7za a -mx9 tmp.zip *
+        # cd ..
+          
+         
+         # chmod +x ./magiskboot
+          #unzip boot.zip
+          #cp -rf kernel-source/out/arch/arm64/boot/Image ./Image
+          #cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ./dtbo.img
+          #./magiskboot unpack boot.img
+          #rm -rf kernel
+         # mv Image kernel
+          #./magiskboot repack boot.img
+         # rm -rf ramdisk.cpio boot.img
+         # mv kernel Image
 
-      - name: Zip
-        run: |
-          zip -r -9 -q -o K40-Kernel.zip new-boot.img Image dtbo.img
+      #- name: Zip
+       # run: |
+      #    zip -r -9 -q -o K40-Kernel.zip ./tmp
 
-      - name: Kernel REL
+     # - name: Kernel REL
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: K40 KernelSU
+       #   path: ./K40-Kernel.zip
+      - name: Upload AnyKernel zip
         uses: actions/upload-artifact@v3
         with:
-          name: K40 KernelSU
-          path: ./K40-Kernel.zip
+          name: ${{ env.FINAL_ZIP}}
+          path: ${{ env.ANYKERNEL_DIR }}

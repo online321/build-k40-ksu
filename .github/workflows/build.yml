@@ -77,40 +77,7 @@ jobs:
           cp -rf kernel-source/out/arch/arm64/boot/Image ./anykernel
           cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ./anykernel
           zip -r -9 -q -o ./anykernel
-          #cp -fp ${{ env.ZIMAGE_DIR }}/dtb ${{ env.ANYKERNEL_DIR }}
-          #mkdir image_output
-          #cd kernel-source
-          #TIME=$(TZ=Asia/Shanghai date "+%Y%m%d%H%M")
-          #mkdir -p tmp
-          #cp -rf kernel-source/out/arch/arm64/boot/Image tmp
-          #cp -rf kernel-source/out/arch/arm64/boot/dtbo.img tmp
-          #cp -rp ./anykernel/* tmp
-        
-        # cd tmp
-        # 7za a -mx9 tmp.zip *
-        # cd ..
           
-         
-         # chmod +x ./magiskboot
-          #unzip boot.zip
-          #cp -rf kernel-source/out/arch/arm64/boot/Image ./Image
-          #cp -rf kernel-source/out/arch/arm64/boot/dtbo.img ./dtbo.img
-          #./magiskboot unpack boot.img
-          #rm -rf kernel
-         # mv Image kernel
-          #./magiskboot repack boot.img
-         # rm -rf ramdisk.cpio boot.img
-         # mv kernel Image
-
-      #- name: Zip
-       # run: |
-      #    zip -r -9 -q -o K40-Kernel.zip ./
-
-     # - name: Kernel REL
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: K40 KernelSU
-       #   path: ./K40-Kernel.zip
       - name: Upload AnyKernel zip
         uses: actions/upload-artifact@v3
         with:

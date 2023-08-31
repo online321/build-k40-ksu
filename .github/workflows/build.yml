@@ -71,6 +71,12 @@ jobs:
         with:
           name: dtbo
           path: kernel-source/out/arch/arm64/boot/dtbo.img
+
+      - name: Upload DTB image
+        uses: actions/upload-artifact@v3
+        with:
+          name: dtb
+          path: kernel-source/out/arch/arm64/boot/dtb.img
           
       - name: Make Anykernel for the kernel
         run: |
